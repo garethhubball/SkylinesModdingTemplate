@@ -2,7 +2,7 @@
 .fake
 .ionide
 
-Src/**/bin
-Src/**/obj
+src/**/bin
+src/**/obj
 
-Build
+Build/**

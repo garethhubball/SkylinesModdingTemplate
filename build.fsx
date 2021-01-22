@@ -27,11 +27,25 @@ let modName =
     | [ project ] -> (FileInfo.ofPath project).Name
     | _ -> failwith "Please have one and only one project in the src directory"
 
-let installFolder =
+
+let windowsInstallFolder =
     sprintf
         "%s/Colossal Order/Cities_Skylines/Addons/Mods/%s"
         (Environment.environVar "LOCALAPPDATA")
         (Path.changeExtension "" modName)
+
+
+let linuxInstallFolder =
+    sprintf
+        "%s/.local/share/Colossal Order/Cities_Skylines/Addons/Mods/%s"
+        (Environment.environVar "HOME")
+        (System.IO.Path.GetFileNameWithoutExtension(modName))
+
+let installFolder =
+    if Environment.isWindows then
+        windowsInstallFolder
+    else
+        linuxInstallFolder
 
 Target.create "Clean" (fun _ -> Shell.cleanDir buildDir)
 
@@ -46,9 +60,10 @@ Target.create
 Target.create
     "Build"
     (fun _ ->
-        !! "./src/*.csproj"
-        |> MSBuild.runRelease id buildDir "Build"
-        |> Trace.logItems "AppBuild-Output: ")
+        DotNet.build
+            (fun x -> {x with OutputPath = (Some "./Build")})
+            (sprintf "src/%s" modName)
+        |> ignore )
 
 Target.create
     "Install"
@@ -60,7 +75,10 @@ Target.create
 open Fake.Core.TargetOperators
 
 // Dependencies
-"Clean" ==> "Build" ==> "Install"
+"Restore"
+    ==> "Clean"
+    ==> "Build"
+    ==> "Install"
 
 // start build
 Target.runOrDefault "Install"

@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using System.Reflection;
 using ColossalFramework;
 using ColossalFramework.UI;
 using ICities;
-using UnityEngine;
+
+[assembly:AssemblyVersion("1.0.*")]
 
 namespace SkylinesMod
 {
