@@ -5,4 +5,4 @@
 - Run `dotnet fake build -t Build` to compile your mod
 - Run `dotnet fake build -t Install` to install the mod into your Cities: Skylines game.
 
-For more information on buuilding mods please see the [Modding Api](https://skylines.paradoxwikis.com/Modding_API)
+For more information on building mods please see the [Modding Api](https://skylines.paradoxwikis.com/Modding_API)
